@@ -1,0 +1,145 @@
+.smartsearch {
+    clear: both;
+    margin-bottom: 20px;
+}
+
+.smartsearch .searchbar {
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    display: inline-block;
+    list-style-type: none;
+    border: none;
+    float: left;
+    width: 90%;
+    border-bottom: 1px solid gray;
+}
+
+.smartsearch .btn {
+    padding: 0;
+    border: none;
+    margin: 0;
+    height: 38px;
+    float: left;
+    width: 10%;
+    border-radius: 0;
+    border-left: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+.searchbar li {
+    margin: 2px 3px;
+    padding-left: 10px;
+    display: inline-block;
+    background-color: green;
+    color: white;
+    line-height: 30px;
+    width: auto;
+}
+
+.searchbar li.input {
+    background-color: blue;
+}
+
+.searchbar li.checkbox {
+    background-color: gray;
+}
+
+.searchbar li.handle{
+    background-color: white;
+}
+
+.searchbar li:last-of-type {
+    float: right;
+}
+
+.searchbar li > i {
+    margin: 0 0 0 10px;
+}
+
+.searchbar li a {
+    margin: 0 5px 0 10px;
+    color: white;
+}
+
+.searchbar li.handle a {
+    color: black;
+}
+
+.searchbar li a:hover {
+    color: grey;
+    text-decoration: none;
+}
+
+.searchbar li:last-of-type {
+    padding: 0;
+}
+
+.searchbar li input {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    height: 33px;
+    line-height: 30px;
+    margin: 0;
+    padding: 0;
+    min-width: 200px;
+}
+
+.searchbar li input:focus {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.smartsearch .filters {
+    display: none;
+    position: relative;
+    top: 0;
+    left: 0;
+    background-color: white;
+    clear: both;
+}
+
+.smartsearch .filters .filter {
+    margin: 1%;
+    display: inline-block;
+    vertical-align: top;
+    max-width: 30%;
+}
+
+.filters hr {
+    clear: both;
+    margin: 0;
+}
+
+.filter h3 {
+    border-bottom: 1px dotted #CCC;
+    color: gray;
+    font-size: 12px;
+    line-height: 20px;
+    margin: 5px 0 10px;
+    padding: 0;
+    text-transform: uppercase;
+}
+
+.filter ul {
+    list-style-type: none;
+}
+
+.filter ul li {
+    list-style-type: none;
+    margin: 2px 0;
+    display: inline-block;
+    width: 50%;
+    min-width: 150px;
+}
+
+.filter ul li a {
+    color: black;
+    text-decoration: none;
+}
+
+.filter ul li a.active {
+    font-weight: bold;
+}
