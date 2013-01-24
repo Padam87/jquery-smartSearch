@@ -1,0 +1,1 @@
+Check out the [demo page](http://padam87.github.com/jquery-smartSearch/).
