@@ -8,7 +8,7 @@
             onChange: function() {
             },
             onClear: function() {
-                smartSearch.$form.submit();
+                smartSearch.submit();
             }
         }
 
@@ -21,16 +21,19 @@
         var init = function() {
             smartSearch.settings = $.extend({}, defaults, options);
             smartSearch.$form = $(el);
-            smartSearch.$search = $(el).find('.search');
+            smartSearch.$search = $(el).find('.search').bind('focus', function() {
+                smartSearch.$filters.show();
+            });
             
             smartSearch.$form.find("select, input").change(smartSearch.settings.onChange);
 
-            smartSearch.decorateField();
+            smartSearch.createSearchbar();
             smartSearch.createFilters();
             
             smartSearch.initialized = true;
         }
         
+        /* Clears filters */
         smartSearch.clearFilters = function() {
             smartSearch.$searchbar.find('li:not(.handle)').remove();
             
@@ -41,70 +44,68 @@
             
             return false;
         }
-
-        smartSearch.decorateField = function() {
-            var $ul = $('<ul></ul>').addClass('searchbar');
+        
+        /* Submits form */
+        smartSearch.submit = function() {
+            smartSearch.$form.submit();
             
-            var $li = $('<li></li>').addClass('handle');
-            $li.append(smartSearch.$search);
-            
-            $ul.append($li);
-            
-            $li = $('<li></li>').addClass('handle');
-            
-            var $remove = $('<a></a>').attr({
-                'href': '#'
-            });
-            
-            $remove.bind('click', smartSearch.clearFilters);
-            
-            var $removeI = $('<i></i>').addClass('icon-remove');
-
-            $remove.append($removeI);
-            
-            $li.append($remove);
-            
-            $ul.append($li);
-            
-            smartSearch.$form.prepend($ul);
-            
-            $ul.bind('click', function() {
+            return false;
+        }
+        
+        /* Creates the searchbar */
+        smartSearch.createSearchbar = function() {
+            smartSearch.$searchbar = $('<ul></ul>').addClass('searchbar').append(/* Search */
+                $('<li></li>').addClass('handle').append(
+                    smartSearch.$search
+                )
+            ).append(/* Submit, Clear */
+                $('<li></li>').addClass('handle pull-right')
+                .append(/* Submit */
+                    $('<a></a>').attr('href', '#').bind('click', smartSearch.submit).append(
+                        $('<i></i>').addClass('icon-search')
+                    )
+                ).append(/* Clear */
+                    $('<a></a>').attr('href', '#').bind('click', smartSearch.clearFilters).append(
+                        $('<i></i>').addClass('icon-remove')
+                    )
+                )
+            ).bind('click', function() {
                 smartSearch.$search.focus();
             });
             
-            smartSearch.$searchbar = $ul;
-            
-            smartSearch.$form.find('[type=submit]');
+            smartSearch.$form.prepend(smartSearch.$searchbar);
         }
-
+        
+        /* Creates the filters, adds active filters to the searchbar */
         smartSearch.createFilters = function() {
             var toClick = [];
             
-            var $filters = $('<div></div>').addClass('filters');
+            var $filters = $('<div></div>').addClass('filters').append(
+                $("<hr />")
+            );
 
             $.each(smartSearch.$form.find("select"), function() {
-                var $field = $(this);
-                var $label = smartSearch.$form.find('label[for=' + $field.attr('id') + ']');
+                var $select = $(this);
+                var $label = smartSearch.$form.find('label[for=' + $select.attr('id') + ']');
 
-                var $filter = $('<div></div>').addClass('filter');
-                $filter.append($('<h3></h3>').html($label.html()));
+                var $filter = $('<div></div>').addClass('filter').append(
+                    $('<h3></h3>').html($label.html())
+                );
                 
                 var $ul = $('<ul></ul>');
 
-                $.each($field.find("option"), function() {
+                $.each($select.find("option"), function() {
                     var $option = $(this);
                     
                     if ($option.attr('value') != '') {
                         var $li = $('<li></li>');
                         var $a = $('<a></a>').attr({
                             'href': '#',
-                            'data-input-id': $field.attr('id'),
+                            'data-input-id': $select.attr('id'),
                             'data-input-value': $option.attr('value')
-                        }).html($option.html());
-
-                        $a.bind('click', smartSearch.applyFilter);
+                        }).html($option.html()).bind('click', smartSearch.applyFilter);
                         
-                        if ($field.attr('multiple') == 'multiple') {
+                        if ($select.attr('multiple') == 'multiple') {
                             var $checkI = $('<i></i>');
                             
                             if ($option.attr('selected') == 'selected') {
@@ -118,9 +119,7 @@
                         }
 
                         if ($option.attr('selected') == 'selected') {
-                            $a.css({
-                                'font-weight': 'bold'
-                            });
+                            $a.addClass('active');
                             toClick.push($a);
                         }
 
@@ -131,7 +130,7 @@
                 
                 $filter.append($ul);
                 
-                $field.hide();
+                $select.hide();
                 $label.hide();
                 
                 $filters.append($filter);
@@ -143,64 +142,46 @@
                 var $field = $(this);
                 var $label = smartSearch.$form.find('label[for=' + $field.attr('id') + ']');
 
-                var $filter = $('<div></div>').addClass('filter');
-                $filter.append($('<h3></h3>').html($label.html()));
-                $filter.append($field);
+                var $filter = $('<div></div>').addClass('filter').append(
+                    $('<h3></h3>').html($label.html())
+                ).append(
+                    $field
+                );
+                    
+                $filters.append($filter);
                 
                 $label.remove();
+                                
+                var $activeFilter = $('<li></li>').attr({
+                    'data-input-id': $field.attr('id')
+                }).append(
+                    $('<a></a>').attr({
+                        'href': '#'
+                    }).bind('click', smartSearch.removeFilter).append(
+                        $('<i></i>').addClass('icon-remove icon-white')
+                    )
+                );
                 
                 if ($field.val() != '' && $field.is(':not(:checkbox)')) {
-                    var $activeFilter = $('<li></li>').attr({
-                        'data-input-id': $field.attr('id')
-                    }).addClass('input');
-
-                    var $remove = $('<a></a>').attr({
-                        'href': '#'
-                    });
-
-                    $remove.bind('click', smartSearch.removeFilter);
-
-                    var $removeI = $('<i></i>').addClass('icon-remove icon-white');
-
-                    $remove.append($removeI);
-                    $activeFilter.append($remove);
-                    
+                    $activeFilter.addClass('input');
                     $activeFilter.prepend($label.html() + ': ' + $field.val());
             
                     smartSearch.$searchbar.prepend($activeFilter);
                 }
                 else if ($field.is(':checkbox:checked')) {
-                    var $activeFilter = $('<li></li>').attr({
-                        'data-input-id': $field.attr('id')
-                    }).addClass('checkbox');
-
-                    var $remove = $('<a></a>').attr({
-                        'href': '#'
-                    });
-
-                    $remove.bind('click', smartSearch.removeFilter);
-
-                    var $removeI = $('<i></i>').addClass('icon-remove icon-white');
-
-                    $remove.append($removeI);
-                    $activeFilter.append($remove);
-                    
+                    $activeFilter.addClass('checkbox');
                     $activeFilter.prepend($label.html());
             
                     smartSearch.$searchbar.prepend($activeFilter);
                 }
-                
-                $filters.append($filter);
             });
+            
+            smartSearch.$form.find("[type=submit]").hide();
             
             $filters.append('<div style="clear: both;"></div>');
             
             smartSearch.$filters = $filters;
             smartSearch.$form.append($filters);
-            
-            smartSearch.$search.bind('focus', function() {
-                smartSearch.$filters.show();
-            });
             
             $.each(toClick, function() {
                 $(this).click();
@@ -247,19 +228,13 @@
             
             var $activeFilter = $('<li></li>').attr({
                 'data-input-id': $a.data('input-id')
-            });
-
-            var $remove = $('<a></a>').attr({
-                'href': '#'
-            });
-
-            $remove.bind('click', smartSearch.removeFilter);
-
-            var $removeI = $('<i></i>').addClass('icon-remove icon-white');
-
-            $remove.append($removeI);
-            $activeFilter.append($remove);
-            
+            }).append(
+                $('<a></a>').attr({
+                    'href': '#'
+                }).bind('click', smartSearch.removeFilter).append(
+                    $('<i></i>').addClass('icon-remove icon-white')
+                )
+            );
             var selectedCount = 0;
             
             $.each($filter.find('li a'), function() {

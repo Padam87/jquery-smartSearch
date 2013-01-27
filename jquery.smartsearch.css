@@ -9,22 +9,11 @@
     background-color: white;
     display: inline-block;
     list-style-type: none;
-    border: none;
     float: left;
-    width: 90%;
-    border-bottom: 1px solid gray;
-}
-
-.smartsearch .btn {
-    padding: 0;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.22) ;
     border: none;
-    margin: 0;
-    height: 38px;
-    float: left;
-    width: 10%;
-    border-radius: 0;
-    border-left: 1px solid gray;
-    border-bottom: 1px solid gray;
 }
 
 .searchbar li {
@@ -45,12 +34,9 @@
     background-color: gray;
 }
 
-.searchbar li.handle{
+.searchbar li.handle {
     background-color: white;
-}
-
-.searchbar li:last-of-type {
-    float: right;
+    padding: 0 15px;
 }
 
 .searchbar li > i {
@@ -69,10 +55,6 @@
 .searchbar li a:hover {
     color: grey;
     text-decoration: none;
-}
-
-.searchbar li:last-of-type {
-    padding: 0;
 }
 
 .searchbar li input {
@@ -99,6 +81,7 @@
     left: 0;
     background-color: white;
     clear: both;
+    width: 100%;
 }
 
 .smartsearch .filters .filter {
@@ -114,7 +97,6 @@
 }
 
 .filter h3 {
-    border-bottom: 1px dotted #CCC;
     color: gray;
     font-size: 12px;
     line-height: 20px;
