@@ -197,7 +197,7 @@
             
             if (smartSearch.initialized == true) {
                 if ($field.attr('multiple') == 'multiple') {
-                    var $option = $field.find('option[value=' + $a.data('input-value') + ']');
+                    var $option = $field.find('option[value="' + $a.data('input-value') + '"]');
                     
                     if ($option.attr('selected') == 'selected') {
                         $option.attr('selected', false);
@@ -240,7 +240,7 @@
             $.each($filter.find('li a'), function() {
                 var $a = $(this);
             
-                var $option = $field.find('option[value=' + $a.data('input-value') + ']');
+                var $option = $field.find('option[value="' + $a.data('input-value') + '"]');
                 
                 if ($option.attr('selected') == 'selected') {
                     selectedCount++;
@@ -252,7 +252,7 @@
                     $.each($filter.find('li a'), function() {
                         var $a = $(this);
 
-                        var $option = $field.find('option[value=' + $a.data('input-value') + ']');
+                        var $option = $field.find('option[value="' + $a.data('input-value') + '"]');
 
                         if ($option.attr('selected') == 'selected') {
                             $activeFilter.prepend($a.html());
