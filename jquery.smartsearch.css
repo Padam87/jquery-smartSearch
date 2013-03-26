@@ -98,10 +98,11 @@
 
 .filter h3 {
     color: gray;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 20px;
     margin: 5px 0 10px;
     padding: 0;
+    text-transform: uppercase;
 }
 
 .filter ul {
