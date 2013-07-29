@@ -1,0 +1,8 @@
+{
+    "name": "jquery-smartSearch",
+    "version": "1.0.0",
+    "main": "jquery.smartsearch.js",
+    "dependencies": {
+        "jquery": "*"
+    }
+}
