@@ -129,7 +129,7 @@
                         if ($select.attr('multiple') == 'multiple') {
                             var $checkI = $('<i></i>');
 
-                            if ($option.attr('selected') == 'selected') {
+                            if ($option.prop('selected')) {
                                 $checkI.addClass(smartSearch.settings.icons.check);
                             }
                             else {
@@ -139,7 +139,7 @@
                             $a.prepend($checkI);
                         }
 
-                        if ($option.attr('selected') == 'selected') {
+                        if ($option.prop('selected')) {
                             $a.addClass('active');
                             toClick.push($a);
                         }
@@ -220,13 +220,13 @@
                 if ($field.attr('multiple') == 'multiple') {
                     var $option = $field.find('option[value="' + $a.data('input-value') + '"]');
 
-                    if ($option.attr('selected') == 'selected') {
-                        $option.attr('selected', false);
+                    if ($option.prop('selected')) {
+                        $option.prop('selected', false);
                         $a.removeClass('active');
                         $a.find('i').removeClass(smartSearch.settings.icons.check).addClass(smartSearch.settings.icons.checkEmpty);
                     }
                     else {
-                        $option.attr('selected', true);
+                        $option.prop('selected', true);
                         $a.addClass('active');
                         $a.find('i').removeClass(smartSearch.settings.icons.checkEmpty).addClass(smartSearch.settings.icons.check);
                     }
@@ -263,7 +263,7 @@
 
                 var $option = $field.find('option[value="' + $a.data('input-value') + '"]');
 
-                if ($option.attr('selected') == 'selected') {
+                if ($option.prop('selected')) {
                     selectedCount++;
                 }
             });
@@ -275,7 +275,7 @@
 
                         var $option = $field.find('option[value="' + $a.data('input-value') + '"]');
 
-                        if ($option.attr('selected') == 'selected') {
+                        if ($option.prop('selected')) {
                             $activeFilter.prepend($a.html());
                         }
                     });
