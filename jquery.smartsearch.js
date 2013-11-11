@@ -20,6 +20,12 @@
     $.smartSearch = function(el, options) {
         var defaults = {
             maxShownOptions: 2,
+            icons: {
+                search: 'icon-search',
+                remove: 'icon-remove',
+                check: 'icon-check',
+                checkEmpty: 'icon-check-empty',
+            },
             onChange: function() {
             },
             onClear: function() {
@@ -77,11 +83,11 @@
                 $('<li></li>').addClass('handle pull-right')
                 .append(/* Submit */
                     $('<a></a>').attr('href', '#').bind('click', smartSearch.submit).append(
-                        $('<i></i>').addClass('icon-search')
+                        $('<i></i>').addClass(smartSearch.settings.icons.search)
                     )
                 ).append(/* Clear */
                     $('<a></a>').attr('href', '#').bind('click', smartSearch.clearFilters).append(
-                        $('<i></i>').addClass('icon-remove')
+                        $('<i></i>').addClass(smartSearch.settings.icons.remove)
                     )
                 )
             ).bind('click', function() {
@@ -124,10 +130,10 @@
                             var $checkI = $('<i></i>');
 
                             if ($option.attr('selected') == 'selected') {
-                                $checkI.addClass('icon-check');
+                                $checkI.addClass(smartSearch.settings.icons.check);
                             }
                             else {
-                                $checkI.addClass('icon-check-empty');
+                                $checkI.addClass(smartSearch.settings.icons.checkEmpty);
                             }
 
                             $a.prepend($checkI);
@@ -173,7 +179,7 @@
                     $('<a></a>').attr({
                         'href': '#'
                     }).bind('click', smartSearch.removeFilter).append(
-                        $('<i></i>').addClass('icon-remove icon-white')
+                        $('<i></i>').addClass(smartSearch.settings.icons.remove)
                     )
                 );
 
@@ -217,12 +223,12 @@
                     if ($option.attr('selected') == 'selected') {
                         $option.attr('selected', false);
                         $a.removeClass('active');
-                        $a.find('i').removeClass('icon-check').addClass('icon-check-empty');
+                        $a.find('i').removeClass(smartSearch.settings.icons.check).addClass(smartSearch.settings.icons.checkEmpty);
                     }
                     else {
                         $option.attr('selected', true);
                         $a.addClass('active');
-                        $a.find('i').removeClass('icon-check-empty').addClass('icon-check');
+                        $a.find('i').removeClass(smartSearch.settings.icons.checkEmpty).addClass(smartSearch.settings.icons.check);
                     }
                 }
                 else {
@@ -247,7 +253,7 @@
                 $('<a></a>').attr({
                     'href': '#'
                 }).bind('click', smartSearch.removeFilter).append(
-                    $('<i></i>').addClass('icon-remove icon-white')
+                    $('<i></i>').addClass(smartSearch.settings.icons.remove)
                 )
             );
             var selectedCount = 0;
@@ -307,7 +313,7 @@
                 var $a = $(this);
 
                 $a.removeClass('active');
-                $a.find('i').removeClass('icon-check').addClass('icon-check-empty');
+                $a.find('i').removeClass(smartSearch.settings.icons.check).addClass(smartSearch.settings.icons.checkEmpty);
             });
 
             return false;
