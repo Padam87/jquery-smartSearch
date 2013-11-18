@@ -2,6 +2,7 @@
     "name": "jquery-smartSearch",
     "version": "1.0.0",
     "main": "jquery.smartsearch.js",
+    "homepage": "http://padam87.github.io/jquery-smartSearch/",
     "dependencies": {
         "jquery": ">1.6"
     }
