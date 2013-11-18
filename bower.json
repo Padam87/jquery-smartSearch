@@ -3,6 +3,6 @@
     "version": "1.0.0",
     "main": "jquery.smartsearch.js",
     "dependencies": {
-        "jquery": "*"
+        "jquery": ">1.6"
     }
 }
