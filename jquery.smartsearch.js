@@ -2,7 +2,7 @@
 * jquery.smartsearch.js
 * http://padam87.github.io/jquery-smartSearch/
 * ===========================================================
-* Copyright 2013 Adam Prager
+* Copyright 2014 Adam Prager
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -19,16 +19,32 @@
 ;(function($) {
     $.smartSearch = function(el, options) {
         var defaults = {
-            maxShownOptions: 2,
+            searchbar: {
+                maxShownOptions: 2
+            },
+            filters: {
+                select: {
+                    maxHeight: 'auto'
+                }
+            },
             icons: {
-                search: 'icon-search',
-                remove: 'icon-remove',
-                check: 'icon-check',
-                checkEmpty: 'icon-check-empty',
+                search: '<i class="fa fa-search"></i>',
+                remove: '<i class="fa fa-times"></i>',
+                check: '<i class="fa fa-check-square-o"></i>',
+                checkEmpty: '<i class="fa fa-square-o"></i>'
             },
-            onChange: function() {
+            onFocus: function(event) {
+                smartSearch.$filters.show();
             },
-            onClear: function() {
+            onClick: function(event) {
+                event.stopPropagation();
+            },
+            onClickOut: function(event) {
+                smartSearch.$filters.hide();
+            },
+            onChange: function(event) {
+            },
+            onClear: function(event) {
                 smartSearch.submit();
             }
         }
@@ -42,9 +58,11 @@
         var init = function() {
             smartSearch.settings = $.extend({}, defaults, options);
             smartSearch.$form = $(el);
-            smartSearch.$search = $(el).find('.search').bind('focus', function() {
-                smartSearch.$filters.show();
-            });
+            smartSearch.$search = $(el).find('.search')
+
+            smartSearch.$search.bind('focus', smartSearch.settings.onFocus);
+            smartSearch.$form.bind('click', smartSearch.settings.onClick);
+            $(document).bind('click', smartSearch.settings.onClickOut);
 
             smartSearch.$form.find("select, input").change(smartSearch.settings.onChange);
 
@@ -83,15 +101,17 @@
                 $('<li></li>').addClass('handle pull-right')
                 .append(/* Submit */
                     $('<a></a>').attr('href', '#').bind('click', smartSearch.submit).append(
-                        $('<i></i>').addClass(smartSearch.settings.icons.search)
+                        smartSearch.settings.icons.search
                     )
                 ).append(/* Clear */
                     $('<a></a>').attr('href', '#').bind('click', smartSearch.clearFilters).append(
-                        $('<i></i>').addClass(smartSearch.settings.icons.remove)
+                        smartSearch.settings.icons.remove
                     )
                 )
-            ).bind('click', function() {
+            ).bind('click', function(event) {
                 smartSearch.$search.focus();
+                smartSearch.settings.onClick(event);
+                smartSearch.settings.onFocus(event);
             });
 
             smartSearch.$form.prepend(smartSearch.$searchbar);
@@ -113,7 +133,10 @@
                     $('<h3></h3>').html($label.html())
                 );
 
-                var $ul = $('<ul></ul>');
+                var $ul = $('<ul></ul>').css({
+                    'max-height': smartSearch.settings.filters.select.maxHeight,
+                    'overflow': 'hidden'
+                });
 
                 $.each($select.find("option"), function() {
                     var $option = $(this);
@@ -127,16 +150,12 @@
                         }).html($option.html()).bind('click', smartSearch.applyFilter);
 
                         if ($select.attr('multiple') == 'multiple') {
-                            var $checkI = $('<i></i>');
-
                             if ($option.prop('selected')) {
-                                $checkI.addClass(smartSearch.settings.icons.check);
+                                $a.prepend(smartSearch.settings.icons.check);
                             }
                             else {
-                                $checkI.addClass(smartSearch.settings.icons.checkEmpty);
+                                $a.prepend(smartSearch.settings.icons.checkEmpty);
                             }
-
-                            $a.prepend($checkI);
                         }
 
                         if ($option.prop('selected')) {
@@ -179,7 +198,7 @@
                     $('<a></a>').attr({
                         'href': '#'
                     }).bind('click', smartSearch.removeFilter).append(
-                        $('<i></i>').addClass(smartSearch.settings.icons.remove)
+                        smartSearch.settings.icons.remove
                     )
                 );
 
@@ -223,12 +242,12 @@
                     if ($option.prop('selected')) {
                         $option.prop('selected', false);
                         $a.removeClass('active');
-                        $a.find('i').removeClass(smartSearch.settings.icons.check).addClass(smartSearch.settings.icons.checkEmpty);
+                        $a.html($a.html().replace(smartSearch.settings.icons.check, smartSearch.settings.icons.checkEmpty));
                     }
                     else {
                         $option.prop('selected', true);
                         $a.addClass('active');
-                        $a.find('i').removeClass(smartSearch.settings.icons.checkEmpty).addClass(smartSearch.settings.icons.check);
+                        $a.html($a.html().replace(smartSearch.settings.icons.checkEmpty, smartSearch.settings.icons.check));
                     }
                 }
                 else {
@@ -253,7 +272,7 @@
                 $('<a></a>').attr({
                     'href': '#'
                 }).bind('click', smartSearch.removeFilter).append(
-                    $('<i></i>').addClass(smartSearch.settings.icons.remove)
+                    smartSearch.settings.icons
                 )
             );
             var selectedCount = 0;
@@ -269,7 +288,7 @@
             });
 
             if (selectedCount > 0) {
-                if (selectedCount <= smartSearch.settings.maxShownOptions) {
+                if (selectedCount <= smartSearch.settings.searchbar.maxShownOptions) {
                     $.each($filter.find('li a'), function() {
                         var $a = $(this);
 
@@ -313,7 +332,7 @@
                 var $a = $(this);
 
                 $a.removeClass('active');
-                $a.find('i').removeClass(smartSearch.settings.icons.check).addClass(smartSearch.settings.icons.checkEmpty);
+                $a.html($a.html().replace(smartSearch.settings.icons.check, smartSearch.settings.icons.checkEmpty));
             });
 
             return false;
